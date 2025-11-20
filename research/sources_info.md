@@ -32,4 +32,5 @@
 
 <a name="antonio-peso-tfg"></a>
 #### Antonio Peso, *TFG*
-- Prior thesis; review for structure, methodology tips, and references relevant to GDPR-compliant ZK applications.
+- file:///C:/Users/janag/AppData/Local/Spark%20Desktop/core-data/cache/messagesData/5/31646/TFG_Antonio.pdf 
+  - Prior thesis; review for structure, methodology tips, and references relevant to GDPR-compliant ZK applications.
