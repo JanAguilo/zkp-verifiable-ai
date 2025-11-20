@@ -5,6 +5,25 @@ In section 5.4.1 Verifiable Audits, many challenges are exposed:
 - Changes on the models can happen more often than audits of that model
 
 
+## [ZK-BASICS](sources_info.md#antonio-peso-tfg)
+Turing Machines (algorithms):
+- Turing machines process an input using a transition function that dynamically moves between states.
+- If the state reached is the reject state, the machine rejects the input and outputs 0.
+- If the state reached is the accept state, the machine accepts the input and outputs 1.
+
+Interactive Turing Machine Schema:
+- Verifier sends random challenge to the Prover, with bit 0, meaning that the prove has to be related to input x, or 1, meaning that the prove has to be related to something else, for instance a different bit of info. This challenge has some randomness to prevent the prover to prepare in advance. 
+- The prover receives the challenge and sends the answer back to the verifier. 
+- The verifier receives the message from the prover and checks. If the verification succeeds, then output 1 (success). Otherwise, output 0 (reject).
+- Since only one party can be active (not both at the same time), there is a switch bit to handle that. Basically each party after doing the needed operation/s, they switch the bit so that the other party activates.
+
+Properties of a proof
+- Completeness: accept a true statement with a high probability
+- Soundness: accepting a false statement with a low probability
+
+4.1.2 pending
+
+
 ## [ZK-FRAMEWORKS](sources_info.md#zero-knowledge-proof-frameworks)
 
 3 Characteristics of ZKP (Section II (Page 3)):
