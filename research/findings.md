@@ -38,6 +38,11 @@ Differences between Interactive and Non-Interactive Proofs (Appendix A):
 In general, Interactive proofs are more scalable in terms of computational power of P but at the cost of having less Vs to verify a proof.
 
 
+## [ZKP MARKET](sources_info.md#proophy-a-zkp-market-mechanism)
+
+A market for ZKP is proposed where there exist users that has some tasks that need to be proved and creates a bid for each task depending on the value the user assigns to the prove, and then there are the provers, where they specify the capacity s of tasks and the cost p of each task. Then, a market mechanism is in charge of allocation and payments.
+
+
 
 
 

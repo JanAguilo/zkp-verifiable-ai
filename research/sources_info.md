@@ -34,3 +34,7 @@
 #### Antonio Peso, *TFG*
 - file:///C:/Users/janag/AppData/Local/Spark%20Desktop/core-data/cache/messagesData/5/31646/TFG_Antonio.pdf 
   - Prior thesis; review for structure, methodology tips, and references relevant to GDPR-compliant ZK applications.
+
+<a name="proop-phy-market"></a> 
+#### Proophy (A ZKP Market Mechanism)
+- https://arxiv.org/abs/2404.06495 
