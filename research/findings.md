@@ -21,8 +21,28 @@ Properties of a proof
 - Completeness: accept a true statement with a high probability
 - Soundness: accepting a false statement with a low probability
 
-4.1.2 pending
+Perfect ZK:
+- A proof system is perfect zero-knowledge if for any verifier there exists a simulator algorithm such that, given the same input x, it can ouput a conversation which is identically distributed to the transcripts of a conversation with the real prover. 
+- A simulator is an algorithm that acts as the "fake prover" which, given only public details(e.g. input x), can generate a transcript (sequence of messages exchanged) that is indistinguishable from the interaction between real prover and verifier.
+- Formal definition: a protocol is zero-knowledge if, for every verifier V', there exists a simulator S such that the distribution of
+    - Real transcript (prover & verifier)
 
+    - Simulated transcript (simulator & verifier) 
+
+    are computationally/statistically/perfectly indistinguishable (depending on the flavor). 
+- Naive explanation: basically, if the verifier can use a simulator algorithm to run the simulation itself and be identically distributed to the output with the conversations with the prover, it means that the verifier didn't learn anything from the prover. 
+
+Computational ZKP:
+- Most of the zkp are not perfect but computational-zk. This means that they rely on typical cryptographical proofs where it is assumed that there are no adversarial feasible algorithms.
+- **Formal definition**: Let $(P, V)$ be an interactive proof system for some language $L$. We say that $(P, V)$ is computational zero-knowledge if for every probabilistic polynomial-time interactive machine $V^{*}$ there exists a probabilistic polynomial-time algorithm $M^{*}$ such that for all $x \in L$ the two ensembles are computationally indistinguishable:
+  - $\{\langle P, V^{*} \rangle (x)\}_{x \in L}$
+  - $\{M^{*}(x)\}_{x \in L}$
+
+  Machine $M^{*}$ is called a simulator for the interaction of $V^{*}$ with $P$.
+
+Auxiliar inputs:
+- the verifier might already have extra information related to the secret before a zero-knowledge proof begins.
+- True robustness in compliance ZKPs requires designing protocols that remain zero-knowledge even if the verifier holds unexpected external or side information.
 
 ## [ZK-FRAMEWORKS](sources_info.md#zero-knowledge-proof-frameworks)
 
