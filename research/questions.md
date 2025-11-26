@@ -1,0 +1,3 @@
+- When is zk-SNARK useful?
+- Since zk-SNARK rely on elliptic curves, what will happen when quantum computers factorize large numbers into prime numbers very fast?
+- Whan we say zk-SNARKs are computationally intensive, how expensive exactly (in terms of energy, money)?
