@@ -38,3 +38,8 @@
 <a name="proop-phy-market"></a> 
 #### Proophy (A ZKP Market Mechanism)
 - https://arxiv.org/abs/2404.06495 
+
+<a name="verifiable-zkml"></a> 
+#### A Survey of ZKP Based Verifiable ML
+- https://arxiv.org/pdf/2502.18535
+  - Explores the 
