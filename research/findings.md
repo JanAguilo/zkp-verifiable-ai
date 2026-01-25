@@ -47,7 +47,7 @@ Auxiliar inputs:
 ## [ZK-FRAMEWORKS](sources_info.md#zero-knowledge-proof-frameworks)
 
 3 Characteristics of ZKP (Section II (Page 3)):
-- *Soundness*: Verifier ($V$) will know if the Prover ($P$) tries to verify a fals statement.
+- *Soundness*: Verifier ($V$) will know if the Prover ($P$) tries to verify a false statement.
 - *Completeness*: Honest $P$ can convince $V$ if the statement is true
 - *Zero-Knowledge*: $V$ will not know anything about the statement private input besides the fact that is true.
 
@@ -61,7 +61,7 @@ In general, Interactive proofs are more scalable in terms of computational power
 - **zk-SNARKs** (Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge)
   - Non-interactive protocols that boast small proof size. 
   - Underlying cryptography: ECC (Elliptic Curves)
-  - Drawbacks: a new trusted setup is required for every new circuit (in other words, if you want to prove something different you have to create a setup every time, which is computationally intensive). However, some recent work have introduced zk-SNARKs that use universal setups, or even no setup is required. 
+  - Drawbacks: a new trusted setup (a ceremony in which the keys used to proof and verify are created) is required for every new circuit (in other words, if you want to prove something different you have to create a setup every time, which is computationally intensive). However, some recent work have introduced zk-SNARKs that use universal setups, or even no setup is required.   
   - **PLONKs** are a subset of zk-SNARK that works with a universal trusted setup (no need for a setup every time) but comes at a cost of higher performance cost (2-5x larger proof size than zk-SNARK, but still in the KB range).
 - **zk-STARKs** (Zero-Knowledge Scalable Transparent Arguments of Knowledge)
   - No trusted setup needed, they use publicly randomness to generate the necessary parameters for proof and verification.
@@ -70,11 +70,32 @@ In general, Interactive proofs are more scalable in terms of computational power
   - The cost comes from the underlying data structures used for generating proofs, called Merkle Trees.
   - How it works
     1. Express computations as an execution tree using Merkle Trees
-    2. Arithmetize the trace (compute polynomials) during proof generation
-    3. Instead of sending the entire trace, you compute evaluations at certain points, which are the leaf nodes. The root of the Merkle Tree acts as a commitement 
+    2. Arithmetize the computation trace (compute polynomials) during proof generation by encoding the trace in polynomial form.
+    3. Instead of sending the entire trace, you compute evaluations of the polynomials at certain points, which are the leaf nodes. The root of the Merkle Tree acts as a commitement.
     4. Low-degree testing via FRI (FRI is a protocol that lets the verifier challenge the prover at a small number of random points)
-    5. The verifier only needs to verify the root, a small set of plynomial evaluations 
+    5. The verifier only needs to verify the root, a small set of polynomial evaluations using hash functions. 
 
 ## [ZKP MARKET](sources_info.md#proophy-a-zkp-market-mechanism)
 
 A market for ZKP is proposed where there exist users that has some tasks that need to be proved and creates a bid for each task depending on the value the user assigns to the prove, and then there are the provers, where they specify the capacity s of tasks and the cost p of each task. Then, a market mechanism is in charge of allocation and payments.
+
+## OWN SUMMARIZED NOTES
+- Interactive proofs: the prover generates a proof specific for each verifier
+- Non-interactive proofs: the prover generates only one proof which can be used for any verifier.
+- Offline verification: the verifier is not involved at the moment of the proof generation. The proof is received later (for instance via blockchain) —> non-interactive proofs are offline while interactive are online (present and involved in the process)
+- Succint —> short and fast to verify
+- ZK-SNARKS:
+    - Succint
+    - Generally trusted setup
+    - Elliptic curve cryptography —> not post-quantum secure (at least currently)
+    - Small prove size (few hundred bytes)
+    - Fast verification (milliseconds)
+    - Zcash uses Halo 2, no trusted setup needed, fast verification and small proof size.
+- ZK-STARKS:
+    - Large proof size (tens or hundreds of KB)
+    - No trusted setup required
+    - Relies on hash function —> post-quantum secure
+    - verification time slightly higher than zk-snarks but still fast (milliseconds also)
+- Commitement schemes: they work like a sealed envelope. One can place a fixed value and then can be revealed, but only once. You cannot open the envelope, change it, and then open it again.
+- In any ZKP that proves a statement about a computation, we need to represent the program as a circuit or constraints. ZKP uses R1CS or arithmetic circuits. The entire program with all intermediate values becomes a system of equations the prover must satisfy with their secret witness
+- Fiat-Shamir used to eliminate interaction

@@ -42,4 +42,8 @@
 <a name="verifiable-zkml"></a> 
 #### A Survey of ZKP Based Verifiable ML
 - https://arxiv.org/pdf/2502.18535
-  - Explores the 
+
+
+<a name="verifiable-zkml"></a> 
+#### ZKPROV: A Zero-Knowledge Approach to Dataset Provenance for LLMs
+- https://arxiv.org/pdf/2506.20915v2
