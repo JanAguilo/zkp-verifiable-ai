@@ -1,1 +1,8 @@
-# Dependencies TBD
+# PII filter: regex (stdlib only), transformers, or hf_api
+transformers>=4.30.0
+torch>=2.0.0
+huggingface_hub>=0.20.0
+
+# Optional: for ONNX export / local ONNX run later
+# onnx>=1.14.0
+# onnxruntime>=1.15.0
