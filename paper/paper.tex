@@ -37,7 +37,13 @@
 \begin{document}
 
 %%% Título
+% --- Project title (active) ---
+\title{Provable Privacy in LLMs with ZKPs: Towards Transparent AI Governance}
+%
+% --- Template title kept for reference (disabled) ---
+\iffalse
 \title{Ejemplo de trabajo para XI JNIC. Siga las instrucciones proporcionadas, indicando el tipo de trabajo de que se trata}
+\fi
 
 
 %%% Autores
@@ -62,6 +68,24 @@ Email tercer autor}}
 
 %%% Resumen
 \begin{abstract}
+Regulators increasingly require evidence-backed assurances about how AI systems
+handle sensitive information. We present a privacy-preserving attestation
+pipeline that proves, in zero knowledge, that a large language model (LLM)
+response passed a personally identifiable information (PII) filter, without
+revealing either the response text or the filtering model. The system generates
+an LLM response, applies a PII detector exported to ONNX, and produces a
+zk-SNARK using EzKL over the detector inference. The proof exposes only a
+public commitment (a hash) to the exact response, binding verification to the
+delivered output while keeping its contents private; model parameters are fixed
+and circuit outputs remain private. We provide a runnable reference
+implementation, discuss practical setup requirements (e.g., structured
+reference strings) and ONNX compatibility constraints, and outline how such
+proofs can support GDPR-aligned auditing and transparent AI governance.
+\end{abstract}
+%
+% --- Template abstract kept for reference (disabled; do not delete) ---
+\iffalse
+\begin{abstract}
   Este documento constituye la plantilla para las {\it X Jornadas
     Nacionales de Investigación en Ciberseguridad} (JNIC 2026), organizadas
   por la Universitat Politècnica de Catalunya.
@@ -74,6 +98,7 @@ Email tercer autor}}
   base para su trabajo. Para más información sobre la organización y
   desarrollo de las jornadas, consulte el enlace \url{https://www.incibe.es/eventos/JNIC/JNIC2026}.
 \end{abstract}
+\fi
 
 
 %%% Palabras clave
