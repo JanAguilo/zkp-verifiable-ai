@@ -1,0 +1,224 @@
+%%% Ejemplo de Paper para JNIC 206
+
+\newcommand{\CLASSINPUTinnersidemargin}{18mm}
+\newcommand{\CLASSINPUToutersidemargin}{12mm}
+\newcommand{\CLASSINPUTtoptextmargin}{20mm}
+\newcommand{\CLASSINPUTbottomtextmargin}{25mm}
+\documentclass[10pt,conference,a4paper]{IEEEtran}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Tildes y demás caracteres en castellano...
+%\usepackage[latin1]{inputenc}
+% o bien
+\usepackage[utf8]{inputenc}
+
+
+%%% Fuente Times...
+\usepackage{times}
+
+
+%%% Figuras en formato .png, .ps, pdf o eps
+\usepackage{graphicx}
+\usepackage{subfigure}
+\DeclareGraphicsExtensions{.png,.eps,.ps,.pdf}
+
+%%% Formato y tipografía de URL, direcciones de correo...
+\usepackage{url}
+%\usepackage{hyperref}
+
+%%% Sección para definir explícitamente la separación de sílabas al final de una línea:
+\hyphenation{si-guien-do}
+
+%%% Secciones etc. en castellano
+\usepackage[spanish,es-tabla]{babel}
+
+\sloppy
+
+\begin{document}
+
+%%% Título
+\title{Ejemplo de trabajo para XI JNIC. Siga las instrucciones proporcionadas, indicando el tipo de trabajo de que se trata}
+
+
+%%% Autores
+\author{\IEEEauthorblockN{Nombre y apellidos primer autor}
+\IEEEauthorblockA{Afiliación  primer autor\\
+Dirección primer autor\\
+Email primer autor}
+\and
+\IEEEauthorblockN{Nombre y apellidos segundo autor}
+\IEEEauthorblockA{Afiliación segundo autor\\
+Dirección segundo autor\\
+Email segundo autor}
+\and
+\IEEEauthorblockN{Nombre y apellidos tercer autor}
+\IEEEauthorblockA{Afiliación tercer autor\\
+Dirección tercer autor\\
+Email tercer autor}}
+
+
+\maketitle
+
+
+%%% Resumen
+\begin{abstract}
+  Este documento constituye la plantilla para las {\it X Jornadas
+    Nacionales de Investigación en Ciberseguridad} (JNIC 2026), organizadas
+  por la Universitat Politècnica de Catalunya.
+  El {\it abstract} debe contener entre 100 y 150 palabras.
+  El tipo de letra es {\it Times New Roman negrita, 9 ptos.}, tal y
+  como aparece en esta plantilla. Se recomienda no emplear acrónimos en esta
+  sección. Esta plantilla ha sido generada tomando como base el estándar de
+  documentos IEEE~\footnote{Disponible para \LaTeX, como plantilla de estilo
+    \texttt{IEEEtran.cls}.}. Por favor, utilice esta plantilla como formato
+  base para su trabajo. Para más información sobre la organización y
+  desarrollo de las jornadas, consulte el enlace \url{https://www.incibe.es/eventos/JNIC/JNIC2026}.
+\end{abstract}
+
+
+%%% Palabras clave
+\begin{IEEEkeywords}
+Jornadas, Ciberseguridad
+\end{IEEEkeywords}
+
+
+%%% Tipo de contribución: seleccione lo que proceda, eliminando el resto del texto
+{\bf Tipo de contribución:}  {\it Investigación original (límite 8 páginas)/
+  Formación e innovación educativa (límite 8 páginas)/  Investigación en
+  desarrollo (límite 8 páginas) /  Investigación ya publicada (límite 2 páginas)}
+
+
+%%% Consejos generales 
+\section{Introducción}
+
+Esta plantilla puede encontrarse en el sitio web de las JNIC
+(\url{https://www.incibe.es/eventos/JNIC/JNIC2026}). Contiene información relativa al diseño general del documento, tipo de letra y tamaños de tipografía apropiados.  El cuerpo del artículo se escribirá en castellano o en inglés, siendo su extensión dependiente del tipo de contribución específica de que se trate, según se recoge en la llamada a la participación de las jornadas.
+
+Los trabajos aceptados deberán ser presentados oralmente en las jornadas.
+
+
+%%% Consejos generales de formato y estilo
+\section{Formato y estilo}
+
+Utilice tipografía {\it Times New Roman}, haciendo uso de un tamaño para el
+cuerpo del texto de $10$ puntos y de $24$ puntos para el título del
+documento. Utilice el formato DIN-A4 (210 $\times$ 297 mm), ajuste los
+márgenes superior e inferior a $2$ y $2.5$ cm respectivamente, el margen
+izquierdo a $1.8$ cm y el derecho a $1.2$ cm. El artículo deberá ir a dos
+columnas con un espaciado entre columnas de $0.42$ cm. Justifique las columnas
+tanto a izquierda como a derecha.
+
+Los párrafos deberán ser escritos a espacio simple. Revise la separación de
+palabras y ajústela en la sección \emph{hyphenation} en el preámbulo del
+documento. No olvide definir cada acrónimo la primera vez que aparezca en el
+texto.
+
+
+%%% Consejos acerca de figuras y tablas
+\subsection{Figuras y tablas}
+
+El tamaño para los títulos de las tablas, figuras y notas al pie de página es
+de $8$ puntos. Todas las figuras y tablas deben aparecer centradas en la columna (las figuras y tablas de gran tamaño podrán extenderse sobre ambas
+columnas). Evite colocar las figuras y tablas en medio de las columnas, siendo preferible su ubicación en la parte superior o inferior de la página.
+
+La descripción de las figuras deberá aparecer debajo de las mismas, centrada,
+numerándose con cifras arábigas.  Use la abreviatura {\it Fig. n} tanto para
+etiquetar una figura o gráfico como para referirse a ella.
+
+La descripción de las tablas deberá aparecer encima de las mismas, numerándose con cifras romanas y con el texto en versalitas. La etiqueta de la tabla ({\it   Tabla m}) debe escribirse en texto normal y encontrarse sola en una línea. Use {\it Tabla m} para referirse a una tabla.
+
+Los pies de las figuras y de las tablas deben seguir el formato mostrado para
+la Fig.~\ref{fig:logoJNIC} y la Tabla \ref{tab:ejtabla}. Si es posible,
+utilice un formato vectorial (como EPS o PDF) para representar diagramas. Los
+formatos de tipo {\em raster} (como PNG o JPG) suelen generar ficheros muy
+grandes y pueden perder calidad al ampliarlos.
+
+\begin{figure}[t]
+	\centering{
+		\includegraphics[width=4cm]{JNIC2026-logo.png}
+	}
+	\caption{Ejemplo de figura: logo de las JNIC.}
+	\label{fig:logoJNIC}
+\end{figure}
+
+\begin{table}[htb]
+\centering
+\caption{Ejemplo de tabla: temperaturas y precipitaciones anuales en los últimos años.}
+\label{tab:ejtabla}
+\begin{tabular}{c c c c c}
+\hline
+\hline
+ Año & T. media & T. máxima     &     T. mínima      & Prep. total  \\ 
+     &    (ºC)  &  media  (ºC)  &      media  (ºC)   &      (mm)     \\
+\hline
+ 2017 & $15,2$  & $19,2$ & $11$   & $1615,63$ \\
+ 2016 & $15,6$  & $19,4$ & $11,5$ & $1789,39$ \\
+ 2015 & $15,8$  & $19,5$ & $11,6$ & $1385,06$ \\
+ 2014 & $16,1$  & $19,8$ & $12,1$ & $1968,71$ \\
+ 2013 & $14,7$  & $18,6$ & $10,9$ & $2218,39$ \\
+ 2012 & $14,7$  & $18,9$ & $10,7$ & $1522,42$ \\
+ 2011 & $15,6$  & $19,5$ & $11,7$ & $1436.81$ \\
+ 2010 & $15,2$  & $18,1$ & $10,5$ & $1602,78$ \\
+\hline
+\hline
+\end{tabular}
+\end{table}
+
+
+%%% Consejos acerca de ecuaciones
+\subsection{Ecuaciones}
+
+Las ecuaciones deben estar centradas y situadas en líneas distintas. Cada ecuación beberá numerarse:
+
+\begin{equation}
+  E = mc^2
+  \label{eq:emc2}
+\end{equation}
+
+Para referenciar una ecuación, utilice {\it Ec.~(\ref{eq:emc2})}.
+
+
+%%% Consejos acerca de numeración
+\subsection{Numeración, pies y encabezados de página}
+
+No aplique ningún elemento de numeración, pie o encabezado de página. Estos
+elementos se añadirán en el proceso final de confección de las actas. Por
+favor, deje la numeración tal como está en el documento modelo.
+
+
+%%% Consejos acerca de las referencias
+\subsection{Referencias}
+
+Las referencias serán numeradas siguiendo el orden de aparición en el
+texto~\cite{JNIC2026}. El formato de las referencias bibliográficas será el
+estándar de IEEE. Se muestra un ejemplo en el apartado correspondiente.
+
+\newpage
+
+%%% Consejos acerca de la conclusiones
+\section{Conclusiones}
+
+El seguimiento de las normas indicadas permitirá que su trabajo resulte
+visualmente atractivo y uniforme con el resto.
+
+Si bien se recomienda el uso de \LaTeX, también puede hacerse uso de la
+plantilla en formato Word dispuesta en la web oficial de las jornadas
+(\url{https://www.incibe.es/eventos/JNIC/JNIC2026}).
+
+
+%%% Consejos acerca de la conclusiones
+\section*{Agradecimientos}
+
+En caso de aparecer, los agradecimientos deberán ubicarse al final del
+trabajo, justo antes de las referencias, en una sección sin numerar.
+
+
+%%% inclusión de referencias
+\bibliographystyle{IEEEtran}
+
+\begin{thebibliography}{99}
+\bibitem{JNIC2026} Nombre autores: "Título del trabajo", en {\it nombre
+    revista/conferencia}, vol. x, n. y, pp. aa-bb, año.
+\end{thebibliography}
+
+\end{document}

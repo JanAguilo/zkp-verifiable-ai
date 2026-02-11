@@ -3,6 +3,11 @@ transformers>=4.30.0
 torch>=2.0.0
 huggingface_hub>=0.20.0
 
-# Optional: for ONNX export / local ONNX run later
-# onnx>=1.14.0
+# EzKL for ZK proofs (run_ezkl.py). If you hit NotPresent on setup, try: pip install ezkl==22.2.1 or ezkl==22.0.1
+ezkl==22.2.1
+
+# Merge ONNX + external .onnx.data for EzKL (run_ezkl.py)
+onnx>=1.14.0
+
+# Optional: for ONNX inference / export
 # onnxruntime>=1.15.0
