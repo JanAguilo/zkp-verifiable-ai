@@ -24,7 +24,20 @@ For a **working proof pipeline** without a custom PII ONNX, the repo uses the [E
 - `python scripts/run_ezkl.py prove --text "No PII here."` — generate proof
 - `python scripts/run_ezkl.py verify` — verify proof
 
-For **real PII filtering**, point to your ONNX with `--onnx` (e.g. `models/roberta_pii/model.onnx` or `models/ner_bert/model.onnx`) once those models are compatible with EzKL.
+For **real PII filtering**, you can use the **BERT NER (CoNLL-03)** ONNX:
+
+1. Export the model (once):  
+   `python scripts/export_bert_ner_onnx.py`  
+   This downloads `dbmdz/bert-large-cased-finetuned-conll03-english` and saves `models/bert_ner_conll03/model.onnx` and the tokenizer.
+
+2. Run setup and prove with that ONNX:  
+   `python scripts/run_ezkl.py setup --onnx models/bert_ner_conll03/model.onnx`  
+   `python scripts/run_ezkl.py prove --text "No PII here." --onnx models/bert_ner_conll03/model.onnx`  
+   `python scripts/run_ezkl.py verify --models-dir models/bert_ner_conll03 --proofs-dir proofs/bert_ner_conll03`
+
+**Note:** BERT-large is a big model; EzKL compile/setup may be slow or run out of memory. If so, try a smaller NER model (e.g. distilbert) and adapt `export_bert_ner_onnx.py`.
+
+If you see **"Failed to generate settings: [graph] [tract] Translating proto model to model"**: tract (used by EzKL) can fail on some ONNX ops or opset versions. Re-export with an opset that tract accepts: `python scripts/export_bert_ner_onnx.py --opset 13` (or `--opset 11`). If it still fails, tract may not support this model’s ops; use the regex ONNX pipeline instead.
 
 ### SRS (Structured Reference String)
 
