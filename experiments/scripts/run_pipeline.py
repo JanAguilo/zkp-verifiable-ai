@@ -104,6 +104,7 @@ class PipelineResult:
     proof_generated: bool = False
     proof_verified: bool | None = None
     proof_path: str | None = None
+    proof_size_bytes: int | None = None
     proof_error: str | None = None
 
     timings_ms: dict[str, float] = field(default_factory=dict)
@@ -198,6 +199,7 @@ def run_pipeline(
 
     result.proof_generated = proof_result.success
     result.proof_path = proof_result.proof_path
+    result.proof_size_bytes = proof_result.proof_size_bytes
     result.proof_error = proof_result.error
 
     if not proof_result.success:
@@ -272,6 +274,8 @@ def main() -> None:
     print(f"  Proof generated: {result.proof_generated}")
     if result.proof_verified is not None:
         print(f"  Proof verified:  {result.proof_verified}")
+    if result.proof_size_bytes is not None:
+        print(f"  Proof size:      {result.proof_size_bytes} bytes")
     if result.proof_error:
         print(f"  Proof error:     {result.proof_error}")
     print(f"  Timings (ms):    {json.dumps(result.timings_ms, indent=4)}")
