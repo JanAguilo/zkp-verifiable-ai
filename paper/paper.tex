@@ -117,7 +117,49 @@ In this work we describe and implement Zaguik, a system that produces such a ver
 
 \section{Related Work}
 % Body to be completed.
+\subsection{Zero-Knowledge Proof Systems}
 
+Zero-knowledge proof systems such as Groth16 (Groth, 2016), PLONK (Gabizon et al., 2019), and related zk-SNARK constructions provide succinct and efficiently verifiable proofs of correct computation over arithmetic circuits. These systems allow a prover to convince a verifier that a computation was executed correctly without revealing private inputs.
+
+More recently, practical toolchains such as libsnark (Ben-Sasson et al., 2014), Halo2 (Bowe et al., 2020), and EzKL (2023) have enabled developers to compile high-level programs and machine learning models into circuits suitable for zk-SNARK proving.
+
+However, these works focus on the cryptographic machinery for proving circuit execution correctness. They do not address the governance question of how such proofs can be used to attest enforcement of content filtering policies over LLM outputs without revealing those outputs.
+
+\subsection{Zero-Knowledge Machine Learning (ZKML)}
+
+Zero-knowledge machine learning focuses on proving correct execution of machine learning inference without revealing private inputs. zkCNN (Liu et al., 2021) demonstrates how convolutional neural network predictions and accuracy can be verified in zero knowledge by expressing inference as arithmetic circuits. Similarly, vCNN: Verifiable Convolutional Neural Network Based on zk-SNARKs presents a framework for generating zk-SNARK proofs that certify correct execution of convolutional neural network inference.
+
+These works address inference correctness: proving that a model’s output was computed faithfully according to fixed parameters. In contrast, our work does not aim to prove correct execution of the LLM itself. Instead, we focus on attesting enforcement of a post-generation filtering policy over LLM outputs. To our knowledge, prior ZKML research does not address governance-level attestation of output filtering for generative models, where the goal is not to prove the model computation but to prove that a compliance constraint was applied to the generated output.
+
+\subsection{Privacy-Preserving Machine Learning and Inference}
+
+Research in privacy-preserving machine learning includes techniques such as secure multiparty computation (Lindell \& Pinkas, 2009), homomorphic encryption for neural network inference (Gilad-Bachrach et al., 2016; Brutzkus et al., 2019), and confidential computing enclaves.
+
+These approaches focus on protecting either model parameters or user inputs during inference. For example, homomorphic encryption allows inference over encrypted data without revealing the input, while secure multiparty computation distributes trust across multiple parties.
+
+Our work differs in focus: rather than protecting model inputs or parameters, we aim to protect the model output while still enabling verifiable policy enforcement. The output remains private, yet a verifier can be assured that a specified constraint was checked.
+
+\subsection{AI Auditing, Transparency, and Governance}
+
+AI governance frameworks emphasize auditing, transparency, and accountability. Model cards (Mitchell et al., 2019), datasheets for datasets (Gebru et al., 2018), and regulatory frameworks such as the EU AI Act propose documentation-based or process-based accountability.
+
+In practice, auditing of deployed systems typically requires access to logs, outputs, or internal documentation. Such approaches rely on institutional trust and do not provide cryptographic guarantees of enforcement at runtime.
+
+Recent discussions in AI safety research have proposed verifiable AI or cryptographic attestation mechanisms, but concrete implementations for generative output filtering remain limited.
+
+Our work contributes a concrete mechanism for cryptographically attesting that a filtering policy was executed on a specific LLM output, without revealing that output to the verifier.
+
+\subsection{PII Detection and Content Moderation}
+
+Personal data detection is commonly performed using rule-based systems (regex patterns), named entity recognition models, or hybrid approaches (Dernoncourt et al., 2017). Production systems for content moderation rely on deterministic filters, ML classifiers, and policy enforcement pipelines.
+
+However, these systems provide enforcement but not verifiability. An external auditor must either trust the system operator or inspect outputs directly. To our knowledge, prior work on PII filtering does not provide a mechanism for cryptographically proving that filtering was applied to a given output without revealing the output itself.
+
+\subsection{Positioning Statement}
+
+To our knowledge, no prior work combines zero-knowledge proofs with LLM output filtering to provide privacy-preserving attestation of policy enforcement. Existing zk-SNARK and ZKML systems enable proving correct circuit execution, but they do not address governance-level questions of output compliance. Conversely, AI auditing and moderation systems enforce policies but lack cryptographic verifiability.
+
+Our work occupies the intersection of these domains: we demonstrate a practical prototype that attests enforcement of an output constraint over LLM-generated text while preserving output confidentiality.
 
 \section{Methodology}
 \label{sec:methodology}
@@ -321,5 +363,20 @@ These results indicate that zero-knowledge proofs can serve as a practical mecha
 
 Future work will explore integration with neural PII detectors, scalable handling of longer outputs, and deployment within broader AI compliance frameworks.
 
+\section{References}
+
+\begin{enumerate}
+    \item Groth, J. (2016). \emph{On the Size of Pairing-Based Non-interactive Arguments}. EUROCRYPT.
+    \item Gabizon, A., Williamson, Z., \& Ciobotaru, O. (2019). \emph{PLONK: Permutations over Lagrange-bases for Oecumenical Noninteractive Arguments of Knowledge}.
+    \item Ben-Sasson, E., et al. (2014). \emph{Succinct Non-Interactive Zero Knowledge for a von Neumann Architecture}.
+    \item Liu, J., et al. (2021). \emph{zkCNN: Zero Knowledge Proofs for Convolutional Neural Network Predictions}.
+    \item Lee, S., Ko, H., Kim, J., \& Oh, H. (2024). \emph{vCNN: Verifiable Convolutional Neural Network Based on zk-SNARKs}. IEEE Transactions on Dependable and Secure Computing, 21(4), 4254--4270.
+    \item Lindell, Y., \& Pinkas, B. (2009). \emph{Secure Multiparty Computation for Privacy-Preserving Data Mining}.
+    \item Gilad-Bachrach, R., et al. (2016). \emph{CryptoNets: Applying Neural Networks to Encrypted Data}.
+    \item Brutzkus, A., et al. (2019). \emph{Low Latency Privacy Preserving Inference}.
+    \item Mitchell, M., et al. (2019). \emph{Model Cards for Model Reporting}.
+    \item Gebru, T., et al. (2018). \emph{Datasheets for Datasets}.
+    \item Dernoncourt, F., et al. (2017). \emph{De-identification of patient notes with recurrent neural networks}.
+\end{enumerate}
 
 \end{document}
