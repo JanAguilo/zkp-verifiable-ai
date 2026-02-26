@@ -15,6 +15,8 @@ This project demonstrates a privacy-preserving system that proves — using zero
    - The proof is **bound** to a hash of the actual output
 5. The verifier can confirm the output was safe — without ever seeing it.
 
+**Output length:** The default regex ONNX circuit encodes the **entire** LLM output up to a maximum of **2048 UTF-8 bytes** (no chunking). The pipeline truncates longer outputs to 2048 bytes and generates one proof over that full (capped) string. So every valid output is fully taken into account for the proof.
+
 ## EzKL example model (default)
 
 For a **working proof pipeline** without a custom PII ONNX, the repo uses the [EzKL 1l_linear example](https://github.com/zkonduit/ezkl/tree/main/examples/onnx/1l_linear): a minimal ONNX that is known to work with EzKL. It is stored under `models/ezkl_example_1l_linear/` (download from the EzKL repo if missing). Commands use this by default:

@@ -24,6 +24,7 @@
 
 %%% Formato y tipografía de URL, direcciones de correo...
 \usepackage{url}
+\usepackage{amsmath}
 %\usepackage{hyperref}
 
 %%% Sección para definir explícitamente la separación de sílabas al final de una línea:
@@ -72,8 +73,7 @@ an LLM response, applies a PII detection policy, and produces a
 zk-SNARK using EzKL over the detector inference. The proof exposes only a
 public commitment (a hash) to the exact response, binding verification to the
 delivered output while keeping its contents private; filtering logic and outputs remain private. We provide a runnable reference
-implementation, discuss practical setup requirements (e.g., structured
-reference strings) and ONNX compatibility constraints, and outline how such
+implementation, discuss practical setup requirements and ONNX compatibility constraints, and outline how such
 proofs can support GDPR-aligned auditing and transparent AI governance.
 \end{abstract}
 %
@@ -112,7 +112,7 @@ Artificial intelligence (AI) systems that process personal data are increasingly
 
 Today, verifying that a provider applies a PII filter to LLM outputs typically requires the auditor to trust the provider's claims or to inspect the outputs and the filtering logic directly. If the auditor sees the raw outputs, privacy is compromised; if the provider must disclose the filtering model or its parameters, intellectual property and competitive concerns arise. This tension leaves a gap: there is no cryptographically sound way to prove that a given output was filtered for PII without revealing either the output or the internals of the filter. Zero-knowledge proofs (ZKPs) address this need by allowing one party (the prover) to convince another (the verifier) that a statement is true without revealing the underlying data or computation. Applied to AI pipelines, ZKPs can attest that a specific computation was performed (e.g., that a PII filter was applied and that its result indicated no PII) while keeping the model and the actual text private.
 
-In this work we describe and implement Zaguik, a system that produces such a verifiable, privacy-preserving attestation for LLM outputs. The pipeline works as follows: (1) an LLM generates a response to a user prompt; (2) a PII filter (in our reference implementation, a regex-based detector) is applied to the output; (3) if the output passes the filter, a SHA256 hash of the output is computed and the output is encoded as input to a circuit; (4) a zk-SNARK proof is generated using EzKL, attesting that the filter was applied and that the circuit output corresponds to a ``clean'' result, with the proof bound to the hash of the response; (5) any verifier holding the hash and the proof can confirm that filtering was correctly applied without ever seeing the text or the filter internals. The proof thus ties verification to the exact delivered output while preserving confidentiality. This approach illustrates how cryptographic attestation can support transparent AI governance: compliance and audit can be based on verifiable proofs rather than on trust alone, and both user privacy and provider confidentiality can be preserved. We provide a runnable reference implementation and discuss practical considerations so that the design can be reproduced and extended towards production-grade, regulation-aware deployments.
+In this work we describe and implement Zaguik, a system that produces such a verifiable, privacy-preserving attestation for LLM outputs. The pipeline works as follows: (1) an LLM generates a response to a user prompt; (2) a PII filter (in our reference implementation, a regex-based detector) is applied to the output; (3) if the output passes the filter, a SHA256 hash of the output is computed and the output is encoded as input to a circuit; (4) a zk-SNARK proof is generated using EzKL, attesting that the filter was applied and that the circuit output corresponds to a ``clean'' result, with the proof bound to the hash of the response; (5) any verifier holding the hash and the proof can confirm that filtering was correctly applied without ever seeing the text or the filter internals. The proof thus ties verification to the exact delivered output while preserving confidentiality. This approach illustrates how cryptographic attestation can support transparent AI governance: compliance and audit can be based on verifiable proofs rather than on trust alone, and both user privacy and provider confidentiality can be preserved. We provide a runnable reference implementation and discuss practical considerations.
 
 
 \section{Related Work}
@@ -134,6 +134,62 @@ The pipeline has two phases: a \emph{filtering phase} and a \emph{proof phase}. 
 	\caption{End-to-end workflow: from user prompt and LLM response through PII filtering to proof generation and verification.}
 	\label{fig:system_overview}
 \end{figure}
+
+\subsection{Formal Statement and Security Model}
+
+We formally define the statement that Zaguik proves and clarify the visibility of data in the zero-knowledge setting.
+
+\paragraph{Notation.}
+Let $y \in \{0,1\}^*$ denote the output string generated by the LLM.  
+Let $H(\cdot)$ be a cryptographic hash function (SHA256 in our implementation).  
+Let $F$ denote the PII filtering policy.  
+Let $C$ be the certified arithmetic circuit that implements $F$.  
+Let $L$ be the fixed input length used for encoding.  
+Let $\mathrm{Enc}_L(y)$ denote the byte-level encoding of $y$, truncated or zero-padded to length $L$.
+
+\paragraph{Public and Private Data.}
+The zero-knowledge proof distinguishes between public inputs and private witness:
+
+\begin{itemize}
+    \item \textbf{Public input:}
+    \begin{itemize}
+        \item $h = H(y)$, a commitment to the LLM output.
+        \item The verification key associated with circuit $C$.
+    \end{itemize}
+    \item \textbf{Private witness:}
+    \begin{itemize}
+        \item The full LLM output string $y$.
+        \item Its encoded representation $x = \mathrm{Enc}_L(y)$.
+        \item The internal witness values required to execute circuit $C$.
+    \end{itemize}
+\end{itemize}
+
+The verifier learns only the commitment $h$ and the proof. The underlying text $y$ and the internal circuit execution remain hidden.
+
+\paragraph{Language Definition.}
+The proof system attests membership in the following NP language:
+
+\[
+\mathcal{L} = \{\, h \mid \exists y \text{ such that } H(y)=h \land C(\mathrm{Enc}_L(y)) = 1 \,\}.
+\]
+
+In other words, $\mathcal{L}$ contains all hash values for which there exists a corresponding text that both matches the hash and passes the certified PII filtering circuit.
+
+\paragraph{Zero-Knowledge Statement.}
+The prover demonstrates, in zero knowledge, that:
+
+\[
+\exists y \text{ such that } H(y)=h \land C(\mathrm{Enc}_L(y)) = 1.
+\]
+
+Informally, this means:
+
+\begin{quote}
+``There exists an LLM output $y$ that corresponds to the public hash $h$, and when processed by the certified PII filtering circuit $C$, the result is \texttt{PASS}.''
+\end{quote}
+
+\paragraph{Scope of the Guarantee.}
+The proof guarantees correct execution of the certified filtering circuit on the committed output. It does not guarantee that the filtering policy is complete or semantically sufficient, nor does it make claims about the internal behavior of the LLM. The guarantee is limited to enforcement integrity: that the specific circuit $C$ was correctly executed on a text consistent with the public commitment.
 
 \subsection{PII Filtering and Policy}
 

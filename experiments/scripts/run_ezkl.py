@@ -1,9 +1,9 @@
 """
 EzKL proof for regex-based PII filter: build ONNX from regex logic, then prove/verify.
 
-- Export regex PII logic to a small ONNX (input [1, 128] bytes -> output: PII count).
+- Export regex PII logic to a small ONNX (input [1, L] bytes, L=2048 -> output: PII count).
 - Setup: gen_settings, compile, get_srs, setup.
-- Prove: encode text -> witness -> proof (bound to hash of output).
+- Prove: encode full output (up to L bytes) -> witness -> proof (bound to hash of output).
 - Verify: check proof with vk/settings/srs.
 """
 
@@ -41,7 +41,8 @@ SETUP_LOGS_DIR = EXPERIMENTS_DIR / "logs" / "setup"
 REGEX_PII_ONNX = DEFAULT_MODELS_DIR / "regex_pii.onnx"
 # Official EzKL example; use with --onnx to test if setup works (isolates NotPresent to our ONNX or ezkl)
 EXAMPLE_1L_LINEAR_ONNX = DEFAULT_MODELS_DIR / "ezkl_example_1l_linear" / "network.onnx"
-MAX_LEN = 128
+# Maximum UTF-8 byte length for LLM output; circuit sees the whole output up to this bound.
+MAX_LEN = 2048
 
 
 # ---------------------------------------------------------------------------
@@ -51,7 +52,7 @@ MAX_LEN = 128
 
 def export_regex_pii_onnx(onnx_path: str | Path) -> Path:
     """
-    Build a minimal ONNX that encodes regex-PII detection: input [1, 128] float (bytes/255),
+    Build a minimal ONNX that encodes regex-PII detection: input [1, MAX_LEN] float (bytes/255),
     output [1, 1] = count of 'suspicious' bytes (e.g. @ for email). Pass = output 0.
     """
     import torch
@@ -62,7 +63,7 @@ def export_regex_pii_onnx(onnx_path: str | Path) -> Path:
         SUSPICIOUS = (64, 45, 46) + tuple(range(48, 58))
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
-            # x: [1, 128], values in [0, 1] (byte/255)
+            # x: [1, MAX_LEN], values in [0, 1] (byte/255)
             out = torch.zeros(x.shape[0], 1, dtype=x.dtype, device=x.device)
             for b in self.SUSPICIOUS:
                 out = out + (x == (b / 255.0)).to(x.dtype).sum(dim=1, keepdim=True)
@@ -319,13 +320,12 @@ def generate_proof(
     vk_path = proofs / "vk.key"
 
     if not Path(pk_path).is_file() or not Path(compiled_path).is_file():
-        if not onnx_path.is_file():
-            if onnx_path == REGEX_PII_ONNX:
-                export_regex_pii_onnx(REGEX_PII_ONNX)
-            else:
-                raise FileNotFoundError(
-                    f"ONNX not found: {onnx_path}. For BERT NER run: python scripts/export_bert_ner_onnx.py"
-                )
+        if onnx_path == REGEX_PII_ONNX:
+            export_regex_pii_onnx(REGEX_PII_ONNX)
+        elif not onnx_path.is_file():
+            raise FileNotFoundError(
+                f"ONNX not found: {onnx_path}. For BERT NER run: python scripts/export_bert_ner_onnx.py"
+            )
         setup_artifacts(onnx_path, models_dir=models_dir, proofs_dir=proofs_dir)
 
     timings: dict[str, float] = {}
@@ -406,13 +406,13 @@ if __name__ == "__main__":
     else:
         onnx_path = REGEX_PII_ONNX
     if args.action == "setup":
-        if not onnx_path.is_file():
-            if onnx_path == REGEX_PII_ONNX:
-                export_regex_pii_onnx(REGEX_PII_ONNX)
-            else:
-                raise FileNotFoundError(
-                    f"ONNX not found: {onnx_path}. For BERT NER run: python scripts/export_bert_ner_onnx.py"
-                )
+        if onnx_path == REGEX_PII_ONNX:
+            # Always re-export so ONNX input shape matches current MAX_LEN (e.g. 2048)
+            export_regex_pii_onnx(REGEX_PII_ONNX)
+        elif not onnx_path.is_file():
+            raise FileNotFoundError(
+                f"ONNX not found: {onnx_path}. For BERT NER run: python scripts/export_bert_ner_onnx.py"
+            )
         paths = setup_artifacts(onnx_path, args.models_dir, args.proofs_dir)
         print("Setup ok:", list(paths.keys()))
     elif args.action == "prove":

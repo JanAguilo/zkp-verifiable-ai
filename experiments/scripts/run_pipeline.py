@@ -27,7 +27,7 @@ if str(_SCRIPTS_DIR) not in sys.path:
 from pii_filter import PIIResult, check_pii  # noqa: E402
 from pii_filter import Method as PIIMethod  # noqa: E402
 from run_ezkl import GenerateProofResult, generate_proof, verify_proof  # noqa: E402
-from run_ezkl import compute_output_hash_sha256  # noqa: E402
+from run_ezkl import MAX_LEN, compute_output_hash_sha256  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,8 @@ DEFAULT_LOGS_DIR = EXPERIMENTS_DIR / "logs"
 def generate_llm_output(
     prompt: str,
     model_name: str = "distilgpt2",
-    max_new_tokens: int = 100,
+    max_new_tokens: int = 512,
+    min_new_tokens: int = 0,
     temperature: float = 1.0,
     top_k: int = 50,
     do_sample: bool = True,
@@ -56,9 +57,10 @@ def generate_llm_output(
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     logger.info(
-        "Loading LLM '%s' (max_new_tokens=%d, temperature=%.2f)",
+        "Loading LLM '%s' (max_new_tokens=%d, min_new_tokens=%d, temperature=%.2f)",
         model_name,
         max_new_tokens,
+        min_new_tokens,
         temperature,
     )
     tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -67,7 +69,7 @@ def generate_llm_output(
     inputs = tokenizer(prompt, return_tensors="pt")
     prompt_len = inputs["input_ids"].shape[1]
 
-    outputs = model.generate(
+    gen_kwargs = dict(
         **inputs,
         max_new_tokens=max_new_tokens,
         do_sample=do_sample,
@@ -75,11 +77,20 @@ def generate_llm_output(
         top_k=top_k,
         pad_token_id=tokenizer.eos_token_id,
     )
+    if min_new_tokens > 0:
+        gen_kwargs["min_new_tokens"] = min_new_tokens
+
+    outputs = model.generate(**gen_kwargs)
 
     # Decode only the new tokens (skip the prompt)
     generated_text = tokenizer.decode(
         outputs[0][prompt_len:], skip_special_tokens=True
     )
+    # Cap to MAX_LEN UTF-8 bytes so the ZK circuit can encode the whole output
+    raw = generated_text.encode("utf-8")
+    if len(raw) > MAX_LEN:
+        generated_text = raw[:MAX_LEN].decode("utf-8", errors="ignore")
+        logger.warning("LLM output truncated to %d bytes (was %d)", MAX_LEN, len(raw))
     return generated_text
 
 
@@ -122,7 +133,8 @@ def run_pipeline(
     prompt: str,
     *,
     llm_model: str = "distilgpt2",
-    max_new_tokens: int = 100,
+    max_new_tokens: int = 512,
+    min_new_tokens: int = 0,
     temperature: float = 1.0,
     pii_method: PIIMethod = "regex",
     pii_api_key: str | None = None,
@@ -134,7 +146,8 @@ def run_pipeline(
     Args:
         prompt:          Text prompt for the LLM.
         llm_model:       HuggingFace model id (default: distilgpt2).
-        max_new_tokens:  Max tokens to generate.
+        max_new_tokens:  Max new tokens to generate; output is truncated to MAX_LEN bytes for the proof.
+        min_new_tokens:  Minimum new tokens (can help prevent very short outputs from small models).
         temperature:     Sampling temperature.
         pii_method:      'regex', 'transformers', or 'hf_api'.
         pii_api_key:     HF token override (only for pii_method='hf_api').
@@ -146,16 +159,22 @@ def run_pipeline(
     timings: dict[str, float] = {}
 
     # ── 1. LLM generation ─────────────────────────────────────────────────
-    logger.info("STAGE 1/4 — LLM generation (model=%s)", llm_model)
+    logger.info("STAGE 1/4 — LLM generation (model=%s, max_new_tokens=%d)", llm_model, max_new_tokens)
     t0 = time.perf_counter()
     llm_output = generate_llm_output(
         prompt,
         model_name=llm_model,
         max_new_tokens=max_new_tokens,
+        min_new_tokens=min_new_tokens,
         temperature=temperature,
     )
     timings["llm_generation_ms"] = (time.perf_counter() - t0) * 1000
-    logger.info("LLM output (%d chars): %.120s…", len(llm_output), llm_output)
+    logger.info(
+        "LLM output (%d chars, max_new_tokens=%d): %.120s…",
+        len(llm_output),
+        max_new_tokens,
+        llm_output,
+    )
 
     # ── 2. Compute output hash ────────────────────────────────────────────
     output_hash = compute_output_hash_sha256(llm_output)
@@ -243,7 +262,8 @@ def main() -> None:
     )
     parser.add_argument("prompt", nargs="?", default="Tell me about Alice Johnson from New York.")
     parser.add_argument("--llm", default="distilgpt2", help="HuggingFace model id (default: distilgpt2)")
-    parser.add_argument("--max-tokens", type=int, default=100)
+    parser.add_argument("--max-tokens", type=int, default=512, help="Max new tokens from LLM; output is capped at %d bytes for the proof" % MAX_LEN)
+    parser.add_argument("--min-tokens", type=int, default=0, help="Min new tokens (e.g. 50 to avoid very short distilgpt2 outputs)")
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--pii-method", choices=["regex", "transformers", "hf_api"], default="regex")
     parser.add_argument("--skip-proof", action="store_true", help="Run LLM + filter only, skip ZK proof")
@@ -254,6 +274,7 @@ def main() -> None:
         args.prompt,
         llm_model=args.llm,
         max_new_tokens=args.max_tokens,
+        min_new_tokens=args.min_tokens,
         temperature=args.temperature,
         pii_method=args.pii_method,
         skip_proof=args.skip_proof,
