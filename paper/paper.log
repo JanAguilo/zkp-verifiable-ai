@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.12.7)  26 FEB 2026 10:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.12.7)  26 FEB 2026 19:46
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -420,7 +420,7 @@ Underfull \hbox (badness 3118) in paragraph at lines 162--163
 \OT1/ptm/m/n/10 proofs with LLM out-put fil-ter-ing to pro-vide privacy-
  []
 
-<system_overview.png, id=123, 1156.32pt x 640.64343pt>
+<system_overview.png, id=124, 1156.32pt x 640.64343pt>
 File: system_overview.png Graphic file (type png)
 <use system_overview.png>
 Package pdftex.def Info: system_overview.png  used on input line 177.
@@ -434,12 +434,12 @@ LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 23
 (C:\Users\janag\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 ) [3] [4]
-Underfull \hbox (badness 1867) in paragraph at lines 362--363
+Underfull \hbox (badness 1867) in paragraph at lines 379--380
 []\OT1/ptm/m/n/10 We pre-sented Za-guik, a privacy-preserving at-tes-ta-tion
  []
 
-
-Underfull \hbox (badness 1953) in paragraph at lines 402--403
+[5]
+Underfull \hbox (badness 1953) in paragraph at lines 421--422
 []\OT1/ptm/m/n/8 F. Der-non-court, J. Y. Lee, O. Uzuner, and P. Szolovits, ``De-
  []
 
@@ -454,7 +454,9 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[5] (paper.aux)
+[6
+
+] (paper.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
@@ -463,17 +465,17 @@ Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: 0179C1374DAF0AC4379B975B7A28E55D;4259.
  ) 
 Here is how much of TeX's memory you used:
- 11307 strings out of 474486
- 184492 string characters out of 5743755
- 1951542 words of memory out of 5000000
- 33401 multiletter control sequences out of 15000+600000
- 594645 words of font info for 100 fonts, out of 8000000 for 9000
+ 11315 strings out of 474486
+ 184510 string characters out of 5743755
+ 1952542 words of memory out of 5000000
+ 33403 multiletter control sequences out of 15000+600000
+ 596860 words of font info for 105 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 75i,8n,79p,1318b,456s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (5 pages, 1189092 bytes).
+ 75i,11n,79p,1318b,454s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
+Output written on paper.pdf (6 pages, 1217704 bytes).
 PDF statistics:
- 221 PDF objects out of 1000 (max. 8388607)
- 49 named destinations out of 1000 (max. 500000)
+ 238 PDF objects out of 1000 (max. 8388607)
+ 50 named destinations out of 1000 (max. 500000)
  198 words of extra memory for PDF output out of 10000 (max. 10000000)
 
