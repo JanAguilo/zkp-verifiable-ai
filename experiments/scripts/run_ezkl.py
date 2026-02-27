@@ -50,9 +50,9 @@ MAX_LEN = 2048
 # ---------------------------------------------------------------------------
 
 
-def export_regex_pii_onnx(onnx_path: str | Path) -> Path:
+def export_regex_pii_onnx(onnx_path: str | Path, max_len: int = MAX_LEN) -> Path:
     """
-    Build a minimal ONNX that encodes regex-PII detection: input [1, MAX_LEN] float (bytes/255),
+    Build a minimal ONNX that encodes regex-PII detection: input [1, max_len] float (bytes/255),
     output [1, 1] = count of 'suspicious' bytes (e.g. @ for email). Pass = output 0.
     """
     import torch
@@ -63,7 +63,7 @@ def export_regex_pii_onnx(onnx_path: str | Path) -> Path:
         SUSPICIOUS = (64, 45, 46) + tuple(range(48, 58))
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
-            # x: [1, MAX_LEN], values in [0, 1] (byte/255)
+            # x: [1, max_len], values in [0, 1] (byte/255)
             out = torch.zeros(x.shape[0], 1, dtype=x.dtype, device=x.device)
             for b in self.SUSPICIOUS:
                 out = out + (x == (b / 255.0)).to(x.dtype).sum(dim=1, keepdim=True)
@@ -71,7 +71,7 @@ def export_regex_pii_onnx(onnx_path: str | Path) -> Path:
 
     model = RegexPIIModule()
     model.eval()
-    dummy = torch.rand(1, MAX_LEN)
+    dummy = torch.rand(1, max_len)
     onnx_path = Path(onnx_path)
     onnx_path.parent.mkdir(parents=True, exist_ok=True)
     torch.onnx.export(
@@ -102,10 +102,11 @@ def _is_bert_ner_onnx(onnx_path: Path) -> bool:
     return (Path(onnx_path).parent / "input_config.json").is_file()
 
 
-def _encode_input_for_onnx(onnx_path: Path, text: str, for_setup: bool = False) -> list:
+def _encode_input_for_onnx(onnx_path: Path, text: str, for_setup: bool = False, max_len: int | None = None) -> list:
     """
     Return input_data payload for ezkl (list of arrays). For regex/1l_linear a single array;
     for BERT NER, list of [input_ids, attention_mask, token_type_ids].
+    When max_len is set, regex encoding uses that length (for per-L experiments).
     """
     onnx_path = Path(onnx_path)
     use_1l_linear = EXAMPLE_1L_LINEAR_ONNX.resolve() == onnx_path.resolve()
@@ -133,7 +134,7 @@ def _encode_input_for_onnx(onnx_path: Path, text: str, for_setup: bool = False) 
             enc["attention_mask"].tolist(),
             token_type_ids.tolist(),
         ]
-    return encode_output_for_circuit(text)
+    return encode_output_for_circuit(text, max_len=max_len or MAX_LEN)
 
 
 def compute_output_hash_sha256(text: str) -> str:
@@ -186,9 +187,10 @@ def setup_artifacts(
     onnx_path: str | Path,
     models_dir: Path | str | None = None,
     proofs_dir: Path | str | None = None,
+    max_len: int | None = None,
     log_costs: bool = True,
 ) -> dict[str, str]:
-    """Gen settings, compile circuit, get SRS, setup (key generation). Returns paths. Logs costs to logs/setup/ if log_costs."""
+    """Gen settings, compile circuit, get SRS, setup (key generation). Returns paths. Logs costs to logs/setup/ if log_costs. When max_len is set (for regex ONNX), dummy input uses that length."""
     onnx_path = Path(onnx_path)
     if not onnx_path.is_file():
         raise FileNotFoundError(onnx_path)
@@ -254,7 +256,7 @@ def setup_artifacts(
         _check_file(compiled_path, min_size=100)
         _check_file(srs_path, min_size=1)
         dummy_data = proofs / "input.json"
-        input_payload = _encode_input_for_onnx(onnx_path, "", for_setup=True)
+        input_payload = _encode_input_for_onnx(onnx_path, "", for_setup=True, max_len=max_len)
         with open(dummy_data, "w") as f:
             json.dump({"input_data": input_payload}, f)
             f.flush()
@@ -304,8 +306,9 @@ def generate_proof(
     models_dir: Path | str | None = None,
     proofs_dir: Path | str | None = None,
     proof_filename: str = "proof.json",
+    max_len: int | None = None,
 ) -> GenerateProofResult:
-    """Encode output, gen witness, prove. Runs setup if keys missing."""
+    """Encode output, gen witness, prove. Runs setup if keys missing. When max_len is set, regex encoding and (if needed) ONNX export use that length (for per-L experiments)."""
     onnx_path = Path(onnx_path) if onnx_path else REGEX_PII_ONNX
     models = Path(models_dir) if models_dir else DEFAULT_MODELS_DIR
     proofs = Path(proofs_dir) if proofs_dir else DEFAULT_PROOFS_DIR
@@ -320,13 +323,15 @@ def generate_proof(
     vk_path = proofs / "vk.key"
 
     if not Path(pk_path).is_file() or not Path(compiled_path).is_file():
-        if onnx_path == REGEX_PII_ONNX:
+        if not onnx_path.is_file() and max_len is not None:
+            export_regex_pii_onnx(onnx_path, max_len=max_len)
+        elif onnx_path == REGEX_PII_ONNX:
             export_regex_pii_onnx(REGEX_PII_ONNX)
         elif not onnx_path.is_file():
             raise FileNotFoundError(
                 f"ONNX not found: {onnx_path}. For BERT NER run: python scripts/export_bert_ner_onnx.py"
             )
-        setup_artifacts(onnx_path, models_dir=models_dir, proofs_dir=proofs_dir)
+        setup_artifacts(onnx_path, models_dir=models_dir, proofs_dir=proofs_dir, max_len=max_len)
 
     timings: dict[str, float] = {}
     data_path = proofs / "input.json"
@@ -334,7 +339,7 @@ def generate_proof(
     proof_path_out = str(proofs / proof_filename)
 
     with open(data_path, "w") as f:
-        json.dump({"input_data": _encode_input_for_onnx(onnx_path, output_text)}, f)
+        json.dump({"input_data": _encode_input_for_onnx(onnx_path, output_text, max_len=max_len)}, f)
         f.flush()
     _check_file(Path(data_path), must_be_json=True)
     _check_file(Path(compiled_path), min_size=100)
