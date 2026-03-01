@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.12.7)  28 FEB 2026 19:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.12.7)  28 FEB 2026 20:16
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -429,18 +429,18 @@ Underfull \hbox (badness 3118) in paragraph at lines 161--162
 \OT1/ptm/m/n/10 proofs with LLM out-put fil-ter-ing to pro-vide privacy-
  []
 
-<system_overview.png, id=128, 1156.32pt x 640.64343pt>
+<system_overview.png, id=132, 1156.32pt x 640.64343pt>
 File: system_overview.png Graphic file (type png)
 <use system_overview.png>
 Package pdftex.def Info: system_overview.png  used on input line 176.
 (pdftex.def)             Requested size: 250.07481pt x 138.54701pt.
 [2 <./system_overview.png>] [3] [4] [5]
-Underfull \hbox (badness 1867) in paragraph at lines 406--407
+Underfull \hbox (badness 1867) in paragraph at lines 419--420
 []\OT1/ptm/m/n/10 We pre-sented Za-guik, a privacy-preserving at-tes-ta-tion
  []
 
 [6]
-Underfull \hbox (badness 1953) in paragraph at lines 448--449
+Underfull \hbox (badness 1953) in paragraph at lines 461--462
 []\OT1/ptm/m/n/8 F. Der-non-court, J. Y. Lee, O. Uzuner, and P. Szolovits, ``De-
  []
 
@@ -462,25 +462,21 @@ Before submitting the final camera ready copy, remember to:
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 11B46E2DCFE3A1D322243429D6D36039;4410.
+(rerunfilecheck)             Checksum: 91758B9855838AED214AACF57121E94F;4582.
  ) 
 Here is how much of TeX's memory you used:
- 11388 strings out of 474486
- 185818 string characters out of 5743755
+ 11390 strings out of 474486
+ 185850 string characters out of 5743755
  1951542 words of memory out of 5000000
- 33469 multiletter control sequences out of 15000+600000
+ 33470 multiletter control sequences out of 15000+600000
  596860 words of font info for 105 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
  75i,11n,79p,1524b,598s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (7 pages, 1235567 bytes).
+Output written on paper.pdf (7 pages, 1237659 bytes).
 PDF statistics:
- 255 PDF objects out of 1000 (max. 8388607)
- 53 named destinations out of 1000 (max. 500000)
- 206 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 259 PDF objects out of 1000 (max. 8388607)
+ 54 named destinations out of 1000 (max. 500000)
+ 214 words of extra memory for PDF output out of 10000 (max. 10000000)
 

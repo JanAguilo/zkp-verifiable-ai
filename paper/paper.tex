@@ -178,6 +178,19 @@ The pipeline has two phases: a \emph{filtering phase} and a \emph{proof phase}. 
 	\label{fig:system_overview}
 \end{figure}
 
+\subsection{zk-SNARK Preliminaries}
+
+A zk-SNARK (zero-knowledge succinct non-interactive argument of knowledge) is a proof system for NP relations of the form 
+$R(x, w)$, where $x$ is public input and $w$ is a private witness. 
+The prover convinces the verifier that there exists a witness $w$ such that $R(x, w) = 1$, without revealing $w$. 
+A zk-SNARK consists of three algorithms: \textit{Setup}, which generates public parameters and keys for a fixed circuit; 
+\textit{Prove}, which produces a proof given the public input and private witness; and \textit{Verify}, which checks the proof using only public data.
+
+In our setting, the relation corresponds to correct execution of the certified circuit $C$ on a private encoded input. 
+The public instance consists of the circuit output (indicating pass/fail) together with protocol-level commitments. 
+The private witness consists of the encoded output prefix and internal intermediate values required for circuit execution. 
+The proof establishes that there exists a witness such that the circuit output equals ``pass'', without revealing the encoded text itself.
+
 \subsection{Formal Statement and Security Model}
 
 We formally define what is proven by the zk-SNARK and clarify the distinction between circuit-level guarantees and protocol-level commitments.

@@ -1,3 +1,7 @@
 experiments/models
 experiments/proofs
 experiments/logs
+paper/paper.aux
+paper/paper.log
+paper/paper.out
+paper/paper.synctex.gz
