@@ -28,6 +28,7 @@
 % Hyperlinks for clickable IEEE-style citations.
 % Load after most packages; keep links unobtrusive.
 \usepackage[hidelinks]{hyperref}
+\usepackage{multirow}
 
 %%% Sección para definir explícitamente la separación de sílabas al final de una línea:
 \hyphenation{si-guien-do}
@@ -72,9 +73,7 @@ pipeline that proves, in zero knowledge, that a large language model (LLM)
 response passed a personally identifiable information (PII) filter, without
 revealing either the response text or the filtering model. The system generates
 an LLM response, applies a PII detection policy, and produces a
-zk-SNARK using EzKL over the detector inference. The proof exposes only a
-public commitment (a hash) to the exact response, binding verification to the
-delivered output while keeping its contents private; filtering logic and outputs remain private. We provide a runnable reference
+zk-SNARK using EzKL over the detector inference. The proof exposes only a public commitment (a hash) to the attested output prefix, binding verification to the encoded portion of the delivered response while keeping its contents private. We provide a runnable reference
 implementation, discuss practical setup requirements and ONNX compatibility constraints, and outline how such
 proofs can support GDPR-aligned auditing and transparent AI governance.
 \end{abstract}
@@ -114,7 +113,7 @@ Artificial intelligence (AI) systems that process personal data are increasingly
 
 Today, verifying that a provider applies a PII filter to LLM outputs typically requires the auditor to trust the provider's claims or to inspect the outputs and the filtering logic directly. If the auditor sees the raw outputs, privacy is compromised; if the provider must disclose the filtering model or its parameters, intellectual property and competitive concerns arise. This tension leaves a gap: there is no cryptographically sound way to prove that a given output was filtered for PII without revealing either the output or the internals of the filter. Zero-knowledge proofs (ZKPs) address this need by allowing one party (the prover) to convince another (the verifier) that a statement is true without revealing the underlying data or computation. Applied to AI pipelines, ZKPs can attest that a specific computation was performed (e.g., that a PII filter was applied and that its result indicated no PII) while keeping the model and the actual text private.
 
-In this work we describe and implement Zaguik, a system that produces such a verifiable, privacy-preserving attestation for LLM outputs. The pipeline works as follows: (1) an LLM generates a response to a user prompt; (2) a PII filter (in our reference implementation, a regex-based detector) is applied to the output; (3) if the output passes the filter, a SHA256 hash of the output is computed and the output is encoded as input to a circuit; (4) a zk-SNARK proof is generated using EzKL, attesting that the filter was applied and that the circuit output corresponds to a ``clean'' result, with the proof bound to the hash of the response; (5) any verifier holding the hash and the proof can confirm that filtering was correctly applied without ever seeing the text or the filter internals. The proof thus ties verification to the exact delivered output while preserving confidentiality. This approach illustrates how cryptographic attestation can support transparent AI governance: compliance and audit can be based on verifiable proofs rather than on trust alone, and both user privacy and provider confidentiality can be preserved. We provide a runnable reference implementation and discuss practical considerations.
+In this work we describe and implement Zaguik, a system that produces such a verifiable, privacy-preserving attestation for LLM outputs. The pipeline works as follows: (1) an LLM generates a response to a user prompt; (2) a PII filter (in our reference implementation, a regex-based detector) is applied to the output; (3) if the output passes the filter, a SHA256 hash of the output is computed and the output is encoded as input to a circuit; (4) a zk-SNARK proof is generated using EzKL, attesting that the certified circuit was executed on the encoded output prefix and that it returned a \texttt{PASS} result; (5) any verifier holding the proof and the published hash commitment can confirm correct circuit execution over the attested prefix without seeing the text or filter internals; (5) any verifier holding the hash and the proof can confirm that filtering was correctly applied without ever seeing the text or the filter internals. The proof thus ties verification to the exact delivered output while preserving confidentiality. This approach illustrates how cryptographic attestation can support transparent AI governance: compliance and audit can be based on verifiable proofs rather than on trust alone, and both user privacy and provider confidentiality can be preserved. We provide a runnable reference implementation and discuss practical considerations.
 
 
 \section{Related Work}
@@ -170,7 +169,7 @@ The core contribution of this work is the \emph{cryptographic attestation pipeli
 
 \subsection{System Overview}
 
-The pipeline has two phases: a \emph{filtering phase} and a \emph{proof phase}. In the filtering phase, a user prompt is answered by an LLM (in our implementation we use DistilGPT-2); the response is then checked by a PII detector. Only if the detector reports that the text contains no PII do we enter the proof phase. There we encode the (clean) output as input to a circuit that models the same filtering logic, generate a zk-SNARK proof over that circuit using EzKL, and output a proof bound to a public commitment (hash) of the response. A verifier who receives the proof and the commitment can check that the filtering computation was correctly applied to the committed output, without learning the text or the internal parameters of the filter. The LLM itself is out of scope of the proof: we attest only that a given string was passed through the certified PII filter and passed.
+The pipeline has two phases: a \emph{filtering phase} and a \emph{proof phase}. In the filtering phase, a user prompt is answered by an LLM (in our implementation we use DistilGPT-2); the response is then checked by a PII detector. Only if the detector reports that the text contains no PII do we enter the proof phase. There we encode the (clean) output as input to a circuit that models the same filtering logic, generate a zk-SNARK proof over that circuit using EzKL, and output a proof published together with a public commitment (hash) of the attested output prefix. A verifier receiving the proof and the commitment can check that the certified circuit was correctly executed on the encoded prefix, without learning the text or the filter parameters. The LLM itself is out of scope of the proof: we attest only that a given string was passed through the certified PII filter and passed.
 
 \begin{figure}[htbp]
 	\centering
@@ -181,61 +180,62 @@ The pipeline has two phases: a \emph{filtering phase} and a \emph{proof phase}. 
 
 \subsection{Formal Statement and Security Model}
 
-We formally define the statement that Zaguik proves and clarify the visibility of data in the zero-knowledge setting.
+We formally define what is proven by the zk-SNARK and clarify the distinction between circuit-level guarantees and protocol-level commitments.
 
-\paragraph{Notation.}
-Let $y \in \{0,1\}^*$ denote the output string generated by the LLM.  
+\paragraph{Notation}
+Let $y \in \{0,1\}^*$ denote the full output string generated by the LLM.  
+Let $L$ be a fixed encoding length in bytes.  
+Let $y_L$ denote the prefix of $y$ consisting of its first $L$ UTF-8 bytes (or the full string if $|y| \le L$).  
+Let $\mathrm{Enc}_L(y_L)$ denote the byte-level encoding of $y_L$, truncated or zero-padded to length $L$.  
 Let $H(\cdot)$ be a cryptographic hash function (SHA256 in our implementation).  
-Let $F$ denote the PII filtering policy.  
-Let $C$ be the certified arithmetic circuit that implements $F$.  
-Let $L$ be the fixed input length in bytes used for encoding (in our implementation $L = 2048$).  
-Let $\mathrm{Enc}_L(y)$ denote the byte-level encoding of $y$, truncated or zero-padded to length $L$.
+Let $C$ be the certified arithmetic circuit implementing the circuit-level filtering policy.  
 
-\paragraph{Public and Private Data.}
-The zero-knowledge proof distinguishes between public inputs and private witness:
+\paragraph{Public Instance and Witness}
+The zk-SNARK proof distinguishes between public data and private witness.
 
 \begin{itemize}
-    \item \textbf{Public input:}
+    \item \textbf{Public instance:}
     \begin{itemize}
-        \item $h = H(y)$, a commitment to the LLM output.
-        \item The verification key associated with circuit $C$.
+        \item The public circuit output $o \in \{0,1\}$ indicating \texttt{PASS} ($o=1$) or \texttt{FAIL}.
     \end{itemize}
     \item \textbf{Private witness:}
     \begin{itemize}
-        \item The full LLM output string $y$.
-        \item Its encoded representation $x = \mathrm{Enc}_L(y)$.
+        \item The encoded prefix $x = \mathrm{Enc}_L(y_L)$.
         \item The internal witness values required to execute circuit $C$.
     \end{itemize}
 \end{itemize}
 
-The verifier learns only the commitment $h$ and the proof. The underlying text $y$ and the internal circuit execution remain hidden.
+The verification key and structured reference string are public system parameters provided to the verifier but are not part of the public instance of a specific proof.
 
-\paragraph{Language Definition.}
-The proof system attests membership in the following NP language:
-
-\[
-\mathcal{L} = \{\, h \mid \exists y \text{ such that } H(y)=h \land C(\mathrm{Enc}_L(y)) = 1 \,\}.
-\]
-
-In other words, $\mathcal{L}$ contains all hash values for which there exists a corresponding text that both matches the hash and passes the certified PII filtering circuit.
-
-\paragraph{Zero-Knowledge Statement.}
-The prover demonstrates, in zero knowledge, that:
+\paragraph{Circuit Statement}
+The zk-SNARK proves the following NP statement:
 
 \[
-\exists y \text{ such that } H(y)=h \land C(\mathrm{Enc}_L(y)) = 1.
+\exists x \text{ such that } C(x) = 1.
 \]
 
-Informally, this means:
+That is, the prover demonstrates knowledge of an input $x$ for which the certified circuit $C$ evaluates to \texttt{PASS}. The circuit itself operates only on the encoded prefix $x$ and does not receive the full string $y$.
 
-\begin{quote}
-``There exists an LLM output $y$ that corresponds to the public hash $h$, and when processed by the certified PII filtering circuit $C$, the result is \texttt{PASS}.''
-\end{quote}
+\paragraph{Protocol-Level Commitment}
+Separately from the circuit, the prover computes a public commitment
+\[
+h = H(y_L),
+\]
+which binds the attestation to the encoded prefix $y_L$. The hash value $h$ is published alongside the proof so that external parties can associate the attestation with a specific output prefix.
 
-In our current implementation, the consistency between the public hash $h$ and the encoded input $\mathrm{Enc}_L(y)$ is enforced at the protocol level: the prover computes both values from the same output string prior to proof generation. The hash equality is not verified inside the arithmetic circuit.
+Importantly, the equality $H(y_L) = h$ is not verified inside the arithmetic circuit. The binding between the public commitment $h$ and the private witness $x$ relies on the prover computing both from the same $y_L$ prior to proof generation. Thus, the SNARK guarantees correct execution of $C(x)$, while the hash commitment operates at the protocol level.
+
+\paragraph{Security Model}
+Under the standard soundness guarantees of zk-SNARKs, no probabilistic polynomial-time adversary can produce a valid proof for $C(x)=1$ without knowing a witness $x$ satisfying that relation. Zero-knowledge ensures that no information about $x$ beyond the truth of the statement is revealed.
+
+However, because the hash commitment is not enforced inside the circuit, the binding between $h$ and $x$ holds under an honest-prover assumption. A malicious prover could, in principle, produce a proof for some $x$ while publishing an unrelated hash value $h$. Strengthening this binding would require verifying the hash inside the circuit or using a SNARK-friendly hash function within $C$.
+
+We assume a standard adversarial model in which the prover may be malicious and the verifier is honest and follows the verification algorithm. Under the soundness property of zk-SNARKs, no probabilistic polynomial-time adversary can produce a valid proof for $C(x)=1$ without knowledge of a witness $x$ satisfying that relation. Zero-knowledge guarantees that the proof reveals no information about $x$ beyond the validity of the statement.
+
+The binding between the public commitment $h$ and the private witness $x$ is enforced at the protocol level and therefore holds under an honest-prover assumption. A malicious prover could, in principle, generate a valid proof for some $x$ while publishing an unrelated hash value $h$. Preventing this would require incorporating hash verification inside the arithmetic circuit.
 
 \paragraph{Scope of the Guarantee.}
-The proof guarantees correct execution of the certified filtering circuit on the committed output. It does not guarantee that the filtering policy is complete or semantically sufficient, nor does it make claims about the internal behavior of the LLM. The guarantee is limited to enforcement integrity: that the specific circuit $C$ was correctly executed on a text consistent with the public commitment.
+The proof guarantees correct execution of the certified circuit $C$ on an encoded prefix $x$. If $|y| \le L$, the entire output is attested; otherwise, only the first $L$ bytes are covered by the guarantee. The system does not prove semantic adequacy of the filtering policy, nor does it make claims about the internal behavior of the LLM. The guarantee is limited to enforcement integrity of the circuit-level constraint over the committed prefix.
 
 \subsection{PII Filtering and Policy}
 
@@ -243,7 +243,7 @@ We distinguish clearly between two components of the filtering pipeline: an oper
 
 First, the system applies a regex-based PII filter in plain execution. This detector searches for structured patterns such as email addresses, phone numbers, identification numbers, and other commonly formatted personal data. Its role is operational: it acts as a gating mechanism, preventing obviously unsafe outputs from proceeding to the proof generation stage.
 
-Second, for zero-knowledge attestation, we implement a separate, circuit-friendly policy as a small PyTorch module that is exported to ONNX and compiled into an arithmetic circuit using EzKL. This module operates at the byte level. It takes as input a fixed-length normalized byte vector and counts occurrences of selected “suspicious” byte values (e.g., '@', '-', '.', and digits). The circuit outputs a scalar count, and the policy is considered satisfied if this count is zero.
+Second, for zero-knowledge attestation, we implement a separate, circuit-friendly policy as a small PyTorch module that is exported to ONNX and compiled into an arithmetic circuit using EzKL. This module operates at the byte level. It takes as input a fixed-length normalized byte vector and counts occurrences of selected “suspicious” byte values (e.g., '@'). The circuit outputs a scalar count, and the policy is considered satisfied if this count is zero.
 
 The zk-SNARK proof certifies correct execution of this ONNX-derived byte-level circuit and the fact that its output equals zero. It does not certify direct execution of the plain regex filter. The regex detector and the byte-counter circuit are separate mechanisms: the former provides practical PII detection in deployment, while the latter encodes a structurally checkable constraint that can be efficiently represented and verified within an arithmetic circuit.
 
@@ -256,14 +256,14 @@ The LLM output is a string. To feed it into the circuit we encode it in fixed-si
 
 We use a byte-level encoding: the UTF-8 representation of the string is zero-padded to length L if shorter. Each byte is normalized to [0,1] by dividing by 255. The resulting vector has shape [1, L] and is used as the single input tensor to the ONNX circuit.
 
-The same string that passes the plain PII check is encoded and provided as private witness input to the circuit. The circuit operates over this full encoded representation.
+The prefix $y_L$ that passed the plain PII check is the portion encoded and fed into the circuit. If $|y| \le L$, the entire output is attested; otherwise, only the first $L$ bytes are covered. The proof is therefore tied to the encoded prefix rather than necessarily the full output.
 
 Separately, we compute a SHA256 hash of the complete output string. This hash serves as a public commitment that binds the proof to the exact delivered response. The hash is not used as circuit input; instead, it is provided as public data alongside the proof so that external parties can associate the attestation with a specific output.
 \subsection{Proof System and Visibility Semantics}
 
 We use EzKL to compile the ONNX model into an arithmetic circuit and to produce zk-SNARK proofs (succinct, non-interactive arguments of knowledge). The security and privacy guarantees depend on how inputs, outputs, and parameters are exposed.
 
-The encoded \emph{input} is kept private as witness data. The verifier learns only the zk-SNARK proof and the public hash commitment: the prover commits to the encoded output string, and the verifier learns this commitment but not the underlying bytes, so the LLM response stays private while the proof is bound to a specific output. The \emph{output} of the circuit is made available to the verifier so they can check that it indicates ``pass'' (e.g., zero PII score). The filter \emph{parameters} are fixed in the circuit and not revealed; the verifier only learns that the same certified circuit was executed. Together, these choices ensure that we prove ``this committed output was run through the certified PII filter and passed'' without leaking the text or the filter internals.
+The encoded \emph{input} is kept private as witness data. The verifier learns only the zk-SNARK proof and the public hash commitment: the prover commits to the encoded output string, and the verifier learns this commitment but not the underlying bytes, so the LLM response stays private while the proof is bound to a specific output. The \emph{output} of the circuit is made available to the verifier so they can check that it indicates ``pass'' (e.g., zero PII score). The filter \emph{parameters} are fixed in the circuit and not revealed; the verifier only learns that the same certified circuit was executed. Together, these choices ensure that we prove that the certified circuit was executed on a private encoded prefix and returned \texttt{PASS}, while only a hash commitment to that prefix is revealed.
 
 \subsection{Setup and Proof Generation}
 
@@ -278,6 +278,14 @@ Verification is deterministic: given the proof, the verification key, the settin
 \subsection{Implementation and Reproducibility}
 
 Our reference implementation is in Python. The PII filter is regex-based in the current experiments. The cryptographic pipeline (regex-derived ONNX export, encoding, setup, proof generation, and verification) is implemented as a single scriptable workflow. The default configuration builds the small regex-derived ONNX, runs setup, and then generates and verifies proofs for a given text string. All steps are documented so that the pipeline can be reproduced and extended; integrating a more expressive PII model would require an ONNX export that is compatible with the proof system backend.
+
+\subsection{Experimental Setup}
+
+All experiments were conducted locally on a single machine with the following hardware and software configuration: a Snapdragon X 12-core X1E80100 CPU at 3.40\,GHz (12 cores), 16\,GB of RAM, running Windows 11 (64-bit). The implementation uses Python~3.13.3 and EzKL~22.2.1. No GPU acceleration was used; all proof generation and verification steps ran entirely on CPU.
+
+The structured reference string (SRS) was generated locally using EzKL's \texttt{gen\_srs} function rather than retrieved from a remote trusted source. This choice is appropriate for a self-contained research prototype but would differ in a production deployment, where the SRS would typically be downloaded from a public trusted ceremony.
+
+All experiments were run locally and sequentially, with no parallel execution across configurations. Each value of $L \in \{128, 256, 512, 1024, 2048\}$ was evaluated three times ($n = 3$) using independently generated reference outputs from the same prompt and model. The mean values over the three runs are reported in Table~\ref{tab:results}.
 
 \section{Results}
 
@@ -311,27 +319,46 @@ Total & 102.44 \\
 
 Table~II presents proof size, proof generation time, witness computation time, and verification time for different values of $L$.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
-\caption{Proof size and timings vs.\ circuit encoding size $L$ (mean over 3 independent runs; reference output = 2048 bytes, prefix-truncated for $L < 2048$).}
+\caption{Proof size and timings vs.\ circuit encoding size $L$ (3 independent runs; reference output = 2048 bytes, prefix-truncated for $L < 2048$). Each $L$ block shows mean, sample standard deviation ($\pm$Std), and observed range [Min, Max].}
 \label{tab:results}
-\begin{tabular}{c r r r r}
+\footnotesize
+\begin{tabular}{c l r r r r}
 \hline
 \hline
-$L$ (bytes) & Proof size & Proof gen. & Witness & Verify \\
-  & (bytes) & (ms) & (ms) & (ms) \\
+$L$ (bytes) & & Proof size (bytes) & Proof gen.\ (ms) & Witness (ms) & Verify (ms) \\
 \hline
-128  & 21882.33 & 15982.16 &  71.07 & 204.29 \\
-256  & 21861.33 & 12808.53 & 145.18 & 184.43 \\
-512  & 21921.67 & 13796.08 & 154.59 & 172.77 \\
-1024 & 21924.00 & 14408.21 & 318.23 & 171.83 \\
-2048 & 21903.67 & 16142.74 & 529.71 & 172.20 \\
+\multirow{3}{*}{128}
+  & Mean      & 21882.33 & 15982.16 &  71.07 & 204.29 \\
+  & $\pm$Std  & $\pm$34.27 & $\pm$4320.56 & $\pm$17.73 & $\pm$38.38 \\
+  & {[Min, Max]} & {[21853, 21920]} & {[11203.38, 19612.19]} & {[50.70, 82.97]} & {[163.84, 240.20]} \\
+\hline
+\multirow{3}{*}{256}
+  & Mean      & 21861.33 & 12808.53 & 145.18 & 184.43 \\
+  & $\pm$Std  & $\pm$25.32 & $\pm$1926.50 & $\pm$92.17 & $\pm$2.63 \\
+  & {[Min, Max]} & {[21842, 21890]} & {[10984.65, 14823.43]} & {[77.07, 250.06]} & {[181.41, 186.20]} \\
+\hline
+\multirow{3}{*}{512}
+  & Mean      & 21921.67 & 13796.08 & 154.59 & 172.77 \\
+  & $\pm$Std  & $\pm$25.01 & $\pm$3824.38 & $\pm$20.01 & $\pm$13.53 \\
+  & {[Min, Max]} & {[21893, 21939]} & {[11356.84, 18203.74]} & {[133.53, 173.36]} & {[160.15, 187.05]} \\
+\hline
+\multirow{3}{*}{1024}
+  & Mean      & 21924.00 & 14408.21 & 318.23 & 171.83 \\
+  & $\pm$Std  & $\pm$22.72 & $\pm$4390.43 & $\pm$81.93 & $\pm$38.67 \\
+  & {[Min, Max]} & {[21898, 21940]} & {[11771.86, 19476.48]} & {[262.94, 412.35]} & {[144.60, 216.09]} \\
+\hline
+\multirow{3}{*}{2048}
+  & Mean      & 21903.67 & 16142.74 & 529.71 & 172.20 \\
+  & $\pm$Std  & $\pm$44.05 & $\pm$4600.60 & $\pm$99.22 & $\pm$9.97 \\
+  & {[Min, Max]} & {[21854, 21938]} & {[13606.72, 19989.30]} & {[469.28, 644.22]} & {[164.02, 183.31]} \\
 \hline
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
-Proof size remains within a narrow range across all tested values of $L$, varying between 21861 bytes and 21924 bytes. No monotonic trend is observed.
+Proof size remains within a narrow range across all tested values of $L$, varying between 21861 bytes and 21924 bytes. No monotonic trend is observed.The minor variations observed in proof size across configurations are attributable to internal serialization differences and metadata encoding in the proof object, rather than structural changes in the underlying circuit.
 
 Proof generation time varies between approximately 12.8 seconds and 16.1 seconds across the tested values of $L$. The measurements do not show a strictly increasing or decreasing pattern with respect to $L$.
 
@@ -376,7 +403,7 @@ Finally, the system guarantees enforcement integrity of the encoded policy, not 
 
 \section{Conclusions}
 
-We presented Zaguik, a privacy-preserving attestation pipeline that proves, in zero knowledge, that a predefined circuit-based filtering policy was executed on an LLM output without revealing the output itself. Using EzKL and a fixed ONNX-derived circuit, we evaluated the end-to-end proving pipeline under multiple encoding lengths. Empirical results show that proof size and verification time remain stable across tested configurations, while witness computation grows with the encoding length and proof generation remains the dominant cost.
+We presented Zaguik, a privacy-preserving attestation pipeline that proves, in zero knowledge, that a circuit-encoded filtering policy was executed on an LLM output prefix and returned a \texttt{PASS} result without revealing the output itself. Using EzKL and a fixed ONNX-derived circuit, we evaluated the end-to-end proving pipeline under multiple encoding lengths. Empirical results show that proof size and verification time remain stable across tested configurations, while witness computation grows with the encoding length and proof generation remains the dominant cost.
 
 Our prototype does not attempt to prove correct execution of the LLM itself, nor does it establish formal equivalence between deployment-time filtering logic and its circuit representation. Instead, it demonstrates that enforcement of a circuit-encoded policy over model outputs can be attested cryptographically while preserving output confidentiality.
 

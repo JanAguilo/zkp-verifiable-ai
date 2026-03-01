@@ -30,27 +30,26 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Zaguik's end-to-end workflow: from user prompt and LLM response through PII filtering to proof generation and verification.}}{2}{figure.1}\protected@file@percent }
 \newlabel{fig:system_overview}{{1}{2}{Zaguik's end-to-end workflow: from user prompt and LLM response through PII filtering to proof generation and verification}{figure.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Formal Statement and Security Model}{3}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0a}Notation.}{3}{paragraph.3.2.0.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0b}Public and Private Data.}{3}{paragraph.3.2.0.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0c}Language Definition.}{3}{paragraph.3.2.0.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0d}Zero-Knowledge Statement.}{3}{paragraph.3.2.0.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0e}Scope of the Guarantee.}{3}{paragraph.3.2.0.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0a}Notation}{3}{paragraph.3.2.0.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0b}Public Instance and Witness}{3}{paragraph.3.2.0.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0c}Circuit Statement}{3}{paragraph.3.2.0.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0d}Protocol-Level Commitment}{3}{paragraph.3.2.0.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0e}Security Model}{3}{paragraph.3.2.0.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0f}Scope of the Guarantee.}{3}{paragraph.3.2.0.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}PII Filtering and Policy}{3}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Encoding and Circuit Input}{3}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Encoding and Circuit Input}{4}{subsection.3.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Proof System and Visibility Semantics}{4}{subsection.3.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-F}}Setup and Proof Generation}{4}{subsection.3.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-G}}Verification}{4}{subsection.3.7}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-H}}Implementation and Reproducibility}{4}{subsection.3.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-I}}Experimental Setup}{4}{subsection.3.9}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {IV}Results}{4}{section.4}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces One-time setup costs (regex PII ONNX, $L=2048$).}}{4}{table.1}\protected@file@percent }
-\newlabel{tab:setup}{{I}{4}{One-time setup costs (regex PII ONNX, $L=2048$)}{table.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Proof size and timings vs.\ circuit encoding size $L$ (mean over 3 independent runs; reference output = 2048 bytes, prefix-truncated for $L < 2048$).}}{4}{table.2}\protected@file@percent }
-\newlabel{tab:results}{{II}{4}{Proof size and timings vs.\ circuit encoding size $L$ (mean over 3 independent runs; reference output = 2048 bytes, prefix-truncated for $L < 2048$)}{table.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces One-time setup costs (regex PII ONNX, $L=2048$).}}{5}{table.1}\protected@file@percent }
+\newlabel{tab:setup}{{I}{5}{One-time setup costs (regex PII ONNX, $L=2048$)}{table.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {V}Discussion}{5}{section.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Interpretation of Results}{5}{subsection.5.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Governance and Security Implications}{5}{subsection.5.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Limitations}{5}{subsection.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusions}{5}{section.6}\protected@file@percent }
 \bibcite{groth2016size}{1}
 \bibcite{gabizon2019plonk}{2}
 \bibcite{bensasson2014vn}{3}
@@ -59,8 +58,11 @@
 \bibcite{lindell2009smpc}{6}
 \bibcite{gilad2016cryptonets}{7}
 \bibcite{brutzkus2019lowlatency}{8}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Proof size and timings vs.\ circuit encoding size $L$ (3 independent runs; reference output = 2048 bytes, prefix-truncated for $L < 2048$). Each $L$ block shows mean, sample standard deviation ($\pm $Std), and observed range [Min, Max].}}{6}{table.2}\protected@file@percent }
+\newlabel{tab:results}{{II}{6}{Proof size and timings vs.\ circuit encoding size $L$ (3 independent runs; reference output = 2048 bytes, prefix-truncated for $L < 2048$). Each $L$ block shows mean, sample standard deviation ($\pm $Std), and observed range [Min, Max]}{table.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusions}{6}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{6}{section*.1}\protected@file@percent }
 \bibcite{mitchell2019modelcards}{9}
 \bibcite{gebru2018datasheets}{10}
 \bibcite{dernoncourt2017deid}{11}
-\@writefile{toc}{\contentsline {section}{References}{6}{section*.1}\protected@file@percent }
-\gdef \@abspage@last{6}
+\gdef \@abspage@last{7}

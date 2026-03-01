@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.12.7)  26 FEB 2026 19:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.12.7)  28 FEB 2026 19:57
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -320,14 +320,20 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 284.
 )
 \Hy@SectionHShift=\skip60
+) (C:\Users\janag\AppData\Local\Programs\MiKTeX\tex/latex/multirow\multirow.sty
+Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
+\multirow@colwidth=\skip61
+\multirow@cntb=\count296
+\multirow@dima=\skip62
+\bigstrutjot=\dimen181
 ) (C:\Users\janag\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.sty
 Package: babel 2024/01/07 v24.1 The Babel package
-\babel@savecnt=\count296
-\U@D=\dimen181
+\babel@savecnt=\count297
+\U@D=\dimen182
 \l@unhyphenated=\language79
  (C:\Users\janag\AppData\Local\Programs\MiKTeX\tex/generic/babel\txtbabel.def)
 \bbl@readstream=\read2
-\bbl@dirlevel=\count297
+\bbl@dirlevel=\count298
 
 *************************************
 * Local config file bblopts.cfg used
@@ -347,43 +353,43 @@ Package babel Info: Importing font and identification data for english
 (babel)             from babel-en.ini. Reported on input line 11.
 ) (C:\Users\janag\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count298
+\l__color_backend_stack_int=\count299
 \l__pdf_internal_box=\box55
 ) (paper.aux)
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
 
 -- Lines per column: 60 (approximate, difference = 0.16455pt).
 (C:\Users\janag\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count299
-\scratchdimen=\dimen182
+\scratchcounter=\count300
+\scratchdimen=\dimen183
 \scratchbox=\box56
-\nofMPsegments=\count300
-\nofMParguments=\count301
+\nofMPsegments=\count301
+\nofMParguments=\count302
 \everyMPshowfont=\toks26
-\MPscratchCnt=\count302
-\MPscratchDim=\dimen183
-\MPnumerator=\count303
-\makeMPintoPDFobject=\count304
+\MPscratchCnt=\count303
+\MPscratchDim=\dimen184
+\MPnumerator=\count304
+\makeMPintoPDFobject=\count305
 \everyMPtoPDFconversion=\toks27
 ) (C:\Users\janag\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -397,13 +403,16 @@ Package grfext Info: Graphics extension search list:
  (C:\Users\janag\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 40.
+Package hyperref Info: Link coloring OFF on input line 41.
  (paper.out) (paper.out)
 \@outlinefile=\write3
 \openout3 = `paper.out'.
 
-
-Underfull \hbox (badness 2334) in paragraph at lines 124--125
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 116.
+ (C:\Users\janag\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+Underfull \hbox (badness 2334) in paragraph at lines 123--124
 []\OT1/ptm/m/n/10 Zero-knowledge proof sys-tems such as Groth16 [[]],
  []
 
@@ -411,35 +420,27 @@ Underfull \hbox (badness 2334) in paragraph at lines 124--125
 
 
 ]
-Underfull \hbox (badness 1515) in paragraph at lines 146--147
+Underfull \hbox (badness 1515) in paragraph at lines 145--146
 []\OT1/ptm/m/n/10 AI gov-er-nance frame-works em-pha-size au-dit-ing, trans-
  []
 
 
-Underfull \hbox (badness 3118) in paragraph at lines 162--163
+Underfull \hbox (badness 3118) in paragraph at lines 161--162
 \OT1/ptm/m/n/10 proofs with LLM out-put fil-ter-ing to pro-vide privacy-
  []
 
-<system_overview.png, id=124, 1156.32pt x 640.64343pt>
+<system_overview.png, id=128, 1156.32pt x 640.64343pt>
 File: system_overview.png Graphic file (type png)
 <use system_overview.png>
-Package pdftex.def Info: system_overview.png  used on input line 177.
+Package pdftex.def Info: system_overview.png  used on input line 176.
 (pdftex.def)             Requested size: 250.07481pt x 138.54701pt.
-[2 <./system_overview.png>]
-Underfull \hbox (badness 2368) in paragraph at lines 223--224
- \OT1/ptm/m/it/10 d) Zero-Knowledge State-ment.: [][] \OT1/ptm/m/n/10 The prover demon-
- []
-
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 232.
-(C:\Users\janag\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) [3] [4]
-Underfull \hbox (badness 1867) in paragraph at lines 379--380
+[2 <./system_overview.png>] [3] [4] [5]
+Underfull \hbox (badness 1867) in paragraph at lines 406--407
 []\OT1/ptm/m/n/10 We pre-sented Za-guik, a privacy-preserving at-tes-ta-tion
  []
 
-[5]
-Underfull \hbox (badness 1953) in paragraph at lines 421--422
+[6]
+Underfull \hbox (badness 1953) in paragraph at lines 448--449
 []\OT1/ptm/m/n/8 F. Der-non-court, J. Y. Lee, O. Uzuner, and P. Szolovits, ``De-
  []
 
@@ -454,28 +455,32 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[6
+[7
 
 ] (paper.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 0179C1374DAF0AC4379B975B7A28E55D;4259.
+(rerunfilecheck)             Checksum: 11B46E2DCFE3A1D322243429D6D36039;4410.
  ) 
 Here is how much of TeX's memory you used:
- 11315 strings out of 474486
- 184510 string characters out of 5743755
- 1952542 words of memory out of 5000000
- 33403 multiletter control sequences out of 15000+600000
+ 11388 strings out of 474486
+ 185818 string characters out of 5743755
+ 1951542 words of memory out of 5000000
+ 33469 multiletter control sequences out of 15000+600000
  596860 words of font info for 105 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 75i,11n,79p,1318b,454s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (6 pages, 1217704 bytes).
+ 75i,11n,79p,1524b,598s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/janag/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
+Output written on paper.pdf (7 pages, 1235567 bytes).
 PDF statistics:
- 238 PDF objects out of 1000 (max. 8388607)
- 50 named destinations out of 1000 (max. 500000)
- 198 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 255 PDF objects out of 1000 (max. 8388607)
+ 53 named destinations out of 1000 (max. 500000)
+ 206 words of extra memory for PDF output out of 10000 (max. 10000000)
 
