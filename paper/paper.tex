@@ -122,7 +122,7 @@ In this work we describe and implement Zaguik, a system that produces such a ver
 
 Zero-knowledge proof systems such as Groth16~\cite{groth2016size}, PLONK~\cite{gabizon2019plonk}; and related zk-SNARK constructions provide succinct and efficiently verifiable proofs of correct computation over arithmetic circuits. These systems allow a prover to convince a verifier that a computation was executed correctly without revealing private inputs.
 
-More recently, practical toolchains such as libsnark~\cite{bensasson2014vn}, Halo2, and EzKL have enabled developers to compile high-level programs and machine learning models into circuits suitable for zk-SNARK proving.
+More recently, practical toolchains such as libsnark~\cite{bensasson2014vn}, Halo2~\cite{halo2}, and EzKL~\cite{ezkl} have enabled developers to compile high-level programs and machine learning models into circuits suitable for zk-SNARK proving.
 
 However, these works focus on the cryptographic machinery for proving circuit execution correctness. They do not address the governance question of how such proofs can be used to attest enforcement of content filtering policies over LLM outputs without revealing those outputs.
 
@@ -435,6 +435,16 @@ A.~Gabizon, Z.~J. Williamson, and O.~Ciobotaru, ``PLONK: Permutations over Lagra
 
 \bibitem{bensasson2014vn}
 E.~Ben-Sasson, A.~Chiesa, E.~Tromer, and M.~Virza, ``Succinct non-interactive zero knowledge for a von Neumann architecture,'' in \emph{Proc. 23rd USENIX Security Symp. (USENIX Security 14)}, pp.~781--796, 2014.
+
+\bibitem{halo2}
+Electric Coin Company.
+\newblock Halo2: A PLONK-based zero-knowledge proving system.
+\newblock Available at: \url{https://github.com/zcash/halo2}
+
+\bibitem{ezkl}
+Zkonduit.
+\newblock EzKL: Zero-Knowledge Machine Learning Framework.
+\newblock Available at: \url{https://github.com/zkonduit/ezkl}
 
 \bibitem{liu2021zkcnn}
 T.~Liu, X.~Xie, and Y.~Zhang, ``zkCNN: Zero knowledge proofs for convolutional neural network predictions and accuracy,'' \emph{Cryptology ePrint Archive}, Paper~2021/673, 2021.
